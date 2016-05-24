@@ -16,6 +16,7 @@
 @property (nonatomic,weak) IBOutlet UISlider *startAngleSlider;
 @property (nonatomic,weak) IBOutlet UISlider *widthSlider;
 @property (nonatomic,weak) IBOutlet UISlider *heightSlider;
+@property (nonatomic,weak) IBOutlet UISlider *borderOffsetSlider;
 @property (nonatomic,weak) IBOutlet UISlider *percentSlider;
 @property (nonatomic,weak) IBOutlet UISwitch *clockwiseSwitch;
 @property (nonatomic,weak) IBOutlet UISwitch *animateSwitch;
@@ -41,6 +42,7 @@
 - (IBAction)startAngleSliderValueChanged:(UISlider *)sender;
 - (IBAction)widthSliderValueChanged:(UISlider *)sender;
 - (IBAction)heightSliderValueChanged:(UISlider *)sender;
+- (IBAction)borderOffsetSliderValueChanged:(UISlider *)sender;
 - (IBAction)percentSliderValueChanged:(UISlider *)sender;
 - (IBAction)clockwiseSwitchValueChanged:(UISwitch *)sender;
 - (IBAction)animateSwitchValueChanged:(UISwitch *)sender;
@@ -64,6 +66,14 @@
     heightSlider.transform = CGAffineTransformMakeRotation(-M_PI_2);
     [self.view addSubview:heightSlider];
 
+	//Rotate our border offset slider
+	UISlider *borderOffsetSlider = self.borderOffsetSlider;
+	[borderOffsetSlider removeFromSuperview];
+	[borderOffsetSlider removeConstraints:self.view.constraints];
+	borderOffsetSlider.translatesAutoresizingMaskIntoConstraints = YES;
+	borderOffsetSlider.transform = CGAffineTransformMakeRotation(-M_PI_2);
+	[self.view addSubview:borderOffsetSlider];
+	
     //Setup the selection view
     self.colorSelectionView = [[UIView alloc] init];
     self.colorSelectionView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -88,6 +98,7 @@
     [self updatePercentLabel];
     [self widthSliderValueChanged:self.widthSlider];
     [self heightSliderValueChanged:self.heightSlider];
+	[self borderOffsetSliderValueChanged:self.borderOffsetSlider];
     [self updateSelectedColor];
 }
 
@@ -113,6 +124,12 @@
     self.heightConstraint.constant = value;
     [self updateViewConstraints];
     [self updateDimensionsLabel];
+}
+
+- (IBAction)borderOffsetSliderValueChanged:(UISlider *)sender
+{
+	CGFloat value = roundf(sender.value);
+	self.graphView.borderOffset = value;
 }
 
 - (IBAction)percentSliderValueChanged:(UISlider *)sender
